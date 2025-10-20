@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Meet</title>
+  <style>
+    body { margin:0; padding:0; font-family: Arial, sans-serif; overflow:hidden; }
+    #roomLink { text-align:center; padding:10px; }
+    #videos { position:relative; width:100vw; height:100vh; background:#f0f0f0; padding:10px; box-sizing:border-box; }
+    #remoteVideos {
+      display: grid; grid-template-columns: repeat(1, 1fr);
+      grid-auto-rows: minmax(180px, auto); gap:10px;
+      width:100%; height:100%;
+    }
+    #remoteVideos video { width:100%; height:100%; object-fit:cover; border-radius:8px; border:1px solid black; }
+    #localVideo { width:150px; height:100px; border-radius:8px; border:2px solid blue; position:absolute; bottom:10px; right:10px; cursor:move; z-index:10; }
+    #controls { position:absolute; bottom:180px; right:10px; display:flex; flex-direction:column; gap:10px; }
+    #controls button, #controls select { padding:10px; font-size:16px; border-radius:8px; cursor:pointer; }
+    #endCallButton { background:red; color:white; }
+    a { color:blue; text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div id="roomLink"></div>
+
+  <div id="videos">
+    <div id="remoteVideos"></div>
+    <video id="localVideo" autoplay muted playsinline></video>
+  </div>
+
+  <div id="controls">
+    <button id="micButton">🎤</button>
+    <button id="videoButton">📹</button>
+    <button id="shareScreenButton">🖥️</button>
+    <select id="screenSize">
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+    </select>
+    <button id="inviteButton">📧 Invite</button>
+    <button id="endCallButton">❌ End Call</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    const roomId = window.location.pathname.substring(1);
+    document.getElementById('roomLink').innerHTML =
+      `Share this link: <a href="${window.location.href}" target="_blank">${window.location.href}</a>`;
+  </script>
+</body>
+</html>
