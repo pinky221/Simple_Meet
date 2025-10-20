@@ -1,6 +1,6 @@
 require('dotenv').config(); // must be at the very top
 const fs = require('fs');
-const https = require('https');
+const http = require('http');
 const express = require('express');
 const { Server } = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
@@ -8,14 +8,14 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 
-// HTTPS credentials for local IP
-const options = {
-  key: fs.readFileSync('./certs/192.168.137.1-key.pem'),
-  cert: fs.readFileSync('./certs/192.168.137.1.pem')
-};
+// // HTTPS credentials for local IP
+// const options = {
+//   key: fs.readFileSync('./certs/192.168.137.1-key.pem'),
+//   cert: fs.readFileSync('./certs/192.168.137.1.pem')
+// };
 
-// Create HTTPS server
-const server = https.createServer(options, app);
+// // Create HTTPS server
+const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(express.static('public'));
@@ -67,5 +67,7 @@ io.on('connection', socket => {
     socket.on('disconnect', () => socket.to(roomId).emit('user-disconnected', socket.id));
   });
 });
-
-server.listen(3000, () => console.log('HTTPS server running on https://192.168.137.1:3000'));
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
